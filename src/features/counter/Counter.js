@@ -1,66 +1,35 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  decrement,
-  increment,
-  incrementByAmount,
-  incrementAsync,
-  incrementIfOdd,
-  selectCount,
-} from './counterSlice';
-import styles from './Counter.module.css';
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { incrementAsync } from "./counterSlice";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 
 export function Counter() {
-  const count = useSelector(selectCount);
   const dispatch = useDispatch();
-  const [incrementAmount, setIncrementAmount] = useState('2');
-
-  const incrementValue = Number(incrementAmount) || 0;
+  const { value, status } = useSelector((state) => state.counter);
+  console.log("counter", value);
+  useEffect(() => {
+    dispatch(incrementAsync());
+  }, [dispatch]);
 
   return (
     <div>
-      <div className={styles.row}>
-        <button
-          className={styles.button}
-          aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
-        >
-          -
-        </button>
-        <span className={styles.value}>{count}</span>
-        <button
-          className={styles.button}
-          aria-label="Increment value"
-          onClick={() => dispatch(increment())}
-        >
-          +
-        </button>
-      </div>
-      <div className={styles.row}>
-        <input
-          className={styles.textbox}
-          aria-label="Set increment amount"
-          value={incrementAmount}
-          onChange={(e) => setIncrementAmount(e.target.value)}
-        />
-        <button
-          className={styles.button}
-          onClick={() => dispatch(incrementByAmount(incrementValue))}
-        >
-          Add Amount
-        </button>
-        <button
-          className={styles.asyncButton}
-          onClick={() => dispatch(incrementAsync(incrementValue))}
-        >
-          Add Async
-        </button>
-        <button
-          className={styles.button}
-          onClick={() => dispatch(incrementIfOdd(incrementValue))}
-        >
-          Add If Odd
-        </button>
+      <h3 className="text-danger">Income Details</h3>
+      <h1>{status}</h1>
+
+      <div className="d-flex flex-wrap ">
+        {value.map((user) => {
+          return (
+            <Card style={{ width: "18rem" }} className="m-2">
+              <Card.Img variant="top" src={user.preview} alt={user.preview} style={{width: "100%", height: "50vh", objectFit: "cover"}} />
+              <Card.Body>
+                <Card.Title>{user.name}</Card.Title>
+                <Card.Text>$ {user.price}</Card.Text>
+                <Button variant="primary">View</Button>
+              </Card.Body>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );

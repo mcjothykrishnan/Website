@@ -9,7 +9,6 @@ export const incrementAsync = createAsyncThunk(
     return json;
   }
 );
-
 export const counterSlice = createSlice({
   name: "counter",
   initialState: {
